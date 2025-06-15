@@ -108,7 +108,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         data.arr_info.forEach((x, index) => {
                             const i = index + 1;
                             const y = x * (x-1) / 2;
-                            explanationHTML += renderTemplate(explanationTemplate, { i, x, y });
+                            explanationHTML += renderTemplate(explanationTemplateTri, { i, x, y });
                         });
                     }
 
