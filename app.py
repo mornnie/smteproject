@@ -24,8 +24,8 @@ if not os.path.exists(UPLOAD_FOLDER) :
 if not os.path.exists(GENERATED_FOLDER) :
     os.makedirs(GENERATED_FOLDER)
 
-scaler1 = joblib.load(os.path.join(BASE_DIR, 'scaler1.pkl')
-model1 = joblib.load(os.path.join(BASE_DIR, 'model1.pkl')
+scaler1 = joblib.load(os.path.join(BASE_DIR, 'scaler1.pkl'))
+model1 = joblib.load(os.path.join(BASE_DIR, 'model1.pkl'))
 
 def show_image(image) :
     cv2.imshow('image', image)
