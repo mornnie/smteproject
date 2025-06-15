@@ -283,8 +283,6 @@ def funcTriangles(image, threshold, approx) :
                 if min(x1, x2) <= int(new_dx) <= max(x1, x2) and min(y1, y2) <= int(new_dy) <= max(y1, y2) :
                     number_of_dividing += 1
                     
-        show_line(image, h)
-        print(number_of_dividing)
         base_info.append(number_of_dividing + 2)
 
         all_triangles += ((number_of_dividing + 1) * (number_of_dividing + 2)) / 2
