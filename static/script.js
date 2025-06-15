@@ -150,7 +150,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
             catch{
-                alert(error.messange);
+                alert(error.message);
             }
         }
     });
