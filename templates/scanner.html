@@ -43,8 +43,10 @@
             <p id="show-status">ยังไม่ได้เลือกไฟล์<br><br>*โปรดเลือกรูปภาพที่มีความชัดและสว่างเพียงพอ*</p>
         </div>
         <div class="buttons">
+            <button type="button" id="button-camera">ถ่ายภาพ</button>
+            <input type="file" id="real-camera" name="image" accept="image/*" capture="camera"/>
             <button type="button" id="button-input">เลือกรูปภาพ</button>
-            <input type="file" id="real-input" name="image" accept="image/*" capture="camera"/>
+            <input type="file" id="real-input" name="image" accept="image/*"/>
             <button type="button" id="button-process">ประมวลผล</button>
         </div>
         <div class="text-result" id="text-result"></div>
