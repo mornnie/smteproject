@@ -123,8 +123,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     alert('cannot upload');
                 }
             }
-            catch{
-                alert(error.messange);
+            catch(error){
+                alert(error.message);
             }
         }
     });
