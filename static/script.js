@@ -43,12 +43,31 @@ document.addEventListener('DOMContentLoaded', () => {
 
     dropdownButton.addEventListener('click', useDropDown);
 
+    const buttonCamera = document.getElementById('button-camera');
+    const realCamera = document.getElementById('real-camera');
     const buttonInput = document.getElementById('button-input');
     const realInput = document.getElementById('real-input');
     const buttonProcess = document.getElementById('button-process');
     const uploadcontainer = document.getElementById('upload-container');
     const textResult = document.getElementById('text-result');
     const textExplain = document.getElementById('text-explain');
+
+    buttonCamera.addEventListener('click', () => {
+        realCamera.click();
+    })
+
+    realCamera.addEventListener('change', () => {
+        const file = realCamera.files[0];
+        
+        if(file){
+            const img = document.createElement('img');
+            img.src = URL.createObjectURL(file)
+            img.style.width = '300px';
+            img.style.height = '300px';
+            uploadcontainer.innerHTML = '';
+            uploadcontainer.appendChild(img);
+        }
+    })
 
     buttonInput.addEventListener('click', () => {
         realInput.click();
@@ -68,7 +87,14 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     buttonProcess.addEventListener('click', async() => {
-        const file = realInput.files[0];
+        let file = null;
+
+        if(realCamera.files.length > 0){
+            file = realCamera.files[0];
+        }
+        else{
+            file = realInput.files[0];
+        }
 
         if(file){
             const formData = new FormData();
@@ -100,7 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     let resultHTML = '';
                     if(data.answer){
-                        resultHTML += renderTemplate(resultTemplate, {answer: data.answer});
+                        resultHTML += renderTemplate(resultTemplateTri, {answer: data.answer});
                     }
 
                     let explanationHTML = '';
@@ -108,7 +134,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         data.arr_info.forEach((x, index) => {
                             const i = index + 1;
                             const y = x * (x-1) / 2;
-                            explanationHTML += renderTemplate(explanationTemplateTri, { i, x, y });
+                            explanationHTML += renderTemplate(explanationTemplate, { i, x, y });
                         });
                     }
 
@@ -123,8 +149,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     alert('cannot upload');
                 }
             }
-            catch(error){
-                alert(error.message);
+            catch{
+                alert(error.messange);
             }
         }
     });
