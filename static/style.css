@@ -172,6 +172,9 @@ body, button, input, select, textarea{
     display: none;
 }
 
+#real-camera{
+    display: none;
+
 .buttons{
     width: 120px;
     margin: 0 auto;
