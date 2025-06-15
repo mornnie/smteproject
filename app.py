@@ -1,4 +1,5 @@
 import os
+import gc
 import cv2
 import math
 import atexit
@@ -11,10 +12,8 @@ from werkzeug.utils import secure_filename
 app = Flask(__name__)
 CORS(app)
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-
-UPLOAD_FOLDER = os.path.join(BASE_DIR, 'static', 'uploads')
-GENERATED_FOLDER = os.path.join(BASE_DIR, 'static', 'generated')
+UPLOAD_FOLDER = r'C:\Users\User\smteproject\website_folder\static\uploads'
+GENERATED_FOLDER = r'C:\Users\User\smteproject\website_folder\static\generated'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['GENERATED_FOLDER'] = GENERATED_FOLDER
 
@@ -24,8 +23,8 @@ if not os.path.exists(UPLOAD_FOLDER) :
 if not os.path.exists(GENERATED_FOLDER) :
     os.makedirs(GENERATED_FOLDER)
 
-scaler1 = joblib.load(os.path.join(BASE_DIR, 'scaler1.pkl'))
-model1 = joblib.load(os.path.join(BASE_DIR, 'model1.pkl'))
+scaler1 = joblib.load(r'C:\Users\User\smteproject\triangle\scaler1.pkl')
+model1 = joblib.load(r'C:\Users\User\smteproject\triangle\model1.pkl')
 
 def show_image(image) :
     cv2.imshow('image', image)
@@ -283,11 +282,83 @@ def funcTriangles(image, threshold, approx) :
                 if min(x1, x2) <= int(new_dx) <= max(x1, x2) and min(y1, y2) <= int(new_dy) <= max(y1, y2) :
                     number_of_dividing += 1
                     
+        show_line(image, h)
+        print(number_of_dividing)
         base_info.append(number_of_dividing + 2)
 
         all_triangles += ((number_of_dividing + 1) * (number_of_dividing + 2)) / 2
     
     return 'triangle', all_triangles, base_info, ret_image
+
+def funcRectangles(image, threshold, approx) :
+    vertices = [tuple(point[0]) for point in approx]
+    
+    sides = [(vertices[i][0], vertices[i][1], vertices[(i + 1) % len(vertices)][0], vertices[(i + 1) % len(vertices)][1])
+            for i in range(len(vertices))]
+    sides = [(x1, y1, x2, y2) if y1 < y2 or (y1 == y2 and x1 < x2) else (x2, y2, x1, y1)
+            for x1, y1, x2, y2 in sides]
+    
+    lines = cv2.HoughLinesP(threshold, 2, np.pi / 180, threshold=50, minLineLength=0, maxLineGap=10)
+    lines = [
+        (x1, y1, x2, y2) if (y1 < y2) or (y1 == y2 and x1 < x2) else (x2, y2, x1, y1)
+        for [[x1, y1, x2, y2]] in lines
+    ]
+    
+    lines = sorted(lines, key=lambda line: line_length(line),  reverse=True)
+    
+    horizontal_lines = []
+    vertical_lines = []
+    
+    for side in sides :
+        x1, y1, x2, y2 = side
+        if abs(y1 - y2) <= 5 :
+            horizontal_lines.append(side)
+        else :
+            vertical_lines.append(side)
+    
+    if lines is not None : 
+        for line1 in lines :
+            keep = True
+            hor = None
+            x1, y1, x2, y2 = line1
+            
+            if cv2.pointPolygonTest(np.array(approx), (float((x1 + x2) / 2), float((y1 + y2) / 2)), False) >= 0 :
+                if abs(y1 - y2) <= 10 :
+                    hor = True
+                    for line2 in horizontal_lines :
+                        fx1, fy1, fx2, fy2 = line2
+
+                        if is_horizontally_overlapping(line1, line2) or is_vertically_overlapping(line1, line2) :
+                            keep = False
+                            break
+                else :
+                    hor = False
+                    for line2 in vertical_lines :
+                        fx1, fy1, fx2, fy2 = line2
+ 
+                        if is_horizontally_overlapping(line1, line2) or is_vertically_overlapping(line1, line2) :
+                            keep = False
+                            break
+                
+                if keep :
+                    if hor :
+                        horizontal_lines.append(line1)
+                    else :
+                        vertical_lines.append(line1)
+    
+    ret_image = image.copy()
+    
+    for x1, y1, x2, y2 in horizontal_lines :
+        cv2.line(ret_image, (x1, y1), (x2, y2), (0, 0, 255), 3)
+    for x1, y1, x2, y2 in vertical_lines :
+        cv2.line(ret_image, (x1, y1), (x2, y2), (255, 0, 0), 3)
+
+    n_horizontal = len(horizontal_lines)
+    n_vertical = len(vertical_lines)
+
+    all_rectangles = (n_horizontal - 1) * (n_vertical - 1)
+    
+    return 'rectangle', all_rectangles, [n_horizontal, n_vertical], ret_image
 
 def func1(file_path) :
     image_original = cv2.imread(file_path)
@@ -353,6 +424,8 @@ def func1(file_path) :
 
     if len(approx) == 3 :
         image_type, answer, arr_info, ret_image = funcTriangles(image, threshold, approx)
+    elif len(approx) == 4 :
+        image_type, answer, arr_info, ret_image = funcRectangles(image, threshold, approx)
         
     return image_type, answer, arr_info, ret_image
 
@@ -390,6 +463,8 @@ def upload_file() :
     
     ret_image_url = url_for('static', filename=f'generated/{new_filename}')
     
+    gc.collect()
+    
     return jsonify({
         'image_type' : image_type,
         'answer' : answer,
@@ -417,5 +492,8 @@ def example() :
 def rating() :
     return render_template('rating.html')
 
-if __name__ == '__main__' :       
+if __name__ == '__main__' :
+    if not os.path.exists(r'website_folder\static\uploads') :
+        os.makedirs(r'website_folder\static\uploads')
+        
     app.run(host='0.0.0.0', port=5000, debug=True)        
