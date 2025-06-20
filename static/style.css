@@ -81,7 +81,7 @@ body, button, input, select, textarea{
     z-index: 1000;
     top: 0;
     left: 0;
-    background-color: #949494;
+    background-color: #8c8c8c;
     overflow-x: hidden;
     transition: 0.3s;
 }
