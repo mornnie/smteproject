@@ -2,7 +2,7 @@ import os
 import gc
 import cv2
 import math
-import atexit
+import time
 import joblib
 import numpy as np
 from flask import Flask, request, jsonify, render_template, send_from_directory, url_for
@@ -383,11 +383,13 @@ def upload_file() :
         file.save(filepath)
     
     image_type, answer, arr_info, ret_image = func1(filepath)
+    
     name, _ = os.path.splitext(filename)
     new_filename = f'{name}_gen.png'
     filepath = os.path.join(app.config['GENERATED_FOLDER'], new_filename)
     cv2.imwrite(filepath, ret_image)
-    ret_image_url = url_for('static', filename=f'generated/{new_filename}')
+    timestamp = int(time.time())
+    ret_image_url = url_for('static', filename=f'generated/{new_filename}') + f'?v={timestamp}'
     
     result = {
         'image_type' : image_type,
