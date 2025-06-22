@@ -386,19 +386,20 @@ def upload_file() :
     name, _ = os.path.splitext(filename)
     new_filename = f'{name}_gen.png'
     filepath = os.path.join(app.config['GENERATED_FOLDER'], new_filename)
-    
     cv2.imwrite(filepath, ret_image)
-    
     ret_image_url = url_for('static', filename=f'generated/{new_filename}')
-
-    gc.collect()
     
-    return jsonify({
+    result = {
         'image_type' : image_type,
         'answer' : answer,
         'arr_info' : arr_info,
         'ret_image_url' : ret_image_url
-    })
+    }
+    
+    del ret_image, image_type, answer, arr_info
+    gc.collect()
+    
+    return result
 
 @app.route('/uploads/<filename>')
 def uploaded_file(filename) :
