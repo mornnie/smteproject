@@ -1,9 +1,44 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const topicButton = document.getElementById('topic-button');
-    const scannerButton = document.getElementById('scanner-button');
-    const exampleButton = document.getElementById('example-button');
-    const ratingButton = document.getElementById('rating-button');
-    
+    const markdown = `
+### การจัดกลุ่ม
+การเลือก หรือ การจัดหมู่ เป็นการจัดเรียงแบบไม่สนใจลำดับ<br><br>
+ถ้ากำหนดเซต A = {1, 2, 3, 4}<br><br>
+หากทำการจัดเรียงเลข 2 หลักจากเลขโดดในเซต A โดยไม่ใช้เลขซ้ำ<br><br>
+จะได้ P(4,2) = $ \\frac{4!}{2!} $ = 12<br><br>
+แต่หากทำการเลือกจำนวน 2 จำนวนจากเซต A<br><br>
+จะพบว่าการเลือก 1 และ 2 เป็นสิ่งเดียวกันกับการเลือก 2 และ 1<br><br>
+นั้นคือ {1, 2} = {2, 1}<br><br>
+การเลือกนี้มีความหมายเทียบเท่ากับสับเซตของเซต A ที่มีสมาชิกสองตัว<br><br>
+ได้แก่ {1, 2}, {1, 3}, {1, 4}, {2, 3}, {2, 4}, {3, 4} มีทั้งหมด 6 แบบ<br><br>
+เมื่อเราคิดย้อนกลับจะพบว่าหากเรามองการจัดหมู่ให้เป็นลำดับโดยการสลับสมาชิกในเซตที่ถูกเลือก<br><br>
+จะทำให้ได้การจัดเรียงเชิงเส้น
+<br><br>
+### ปัญหาการจัดหมู่
+สมมติให้มีสิ่งของ n สิ่ง N = {n1, n2, n3,…, nn}<br><br>
+ทำการเลือก k สิ่งจะแทนด้วย C(n,k)<br><br>
+จะได้เซตในรูปของ {c1, c2, …, ck} เป็นสับเซตของ N ที่มีสมาชิก k ตัว<br><br>
+หากเราทำการเรียงสับเปลี่ยน k ตัวนี้จะได้ k! จะเกิดเป็นการจัดเรียงสิ่งของ n สิ่ง k ตำแหน่ง<br><br>
+P(n,k) เขียนเป็นสมการได้ดังนี้ C(n,k) x k! = P(n,k)<br><br>
+จะได้ว่า C(n,k) = $ \\frac{P(n,k)}{k!} $ = $ \\frac{n!}{(n - k)!k!} $<br><br>
+**ตัวอย่าง** กำหนดพื้นที่ขนาด 3x4 ตารางเมตรดังรูป จงหาจำนวนรูปสี่เหลี่ยมมุมฉาก<br><br>
+![](https://www.scimath.org/images/2019/Lesson/11244/11244-8.JPG)<br><br>
+ขั้นตอนที่ 1 เลือกเส้นแนวตั้งได้ 2 เส้นจาก 4 เส้น C(4,2)<br><br>
+ขั้นตอนที่ 2 เลือกเส้นแนวตั้งได้ 2 เส้นจาก 5 เส้น C(5,2)<br><br>
+จำนวนรูปสี่เหลี่ยมมุมฉากทั้งหมดเท่ากับ C(4,2) x C(5,2) = 60 รูป<br><br>
+คุณสมบัติที่ควรรู้ของ C(n,k) พิจารณา C(100,9) = $ \\frac{100!}{91! 9!} $ = $ \\frac{100!}{9! 91!} $ = C(100,91)<br><br>
+สังเกตได้ว่า C(n,r) = C(n,k) ถ้า r + k = n เนื่องจาก r = n - k จะได้ C(n,r) = n! / [ (n - r)!r! ] = n! / [ k!(n - k)! ] = C(n,k)<br><br>
+หากตีความหมายของ C(n,k) = C(n, n - k) จะแปลความได้ว่า<br><br>
+การจัดหมู่หรือเลือกสิ่งของจำนวน k สิ่ง จะทำให้ได้สิ่งของที่ไม่ถูกเลือกจะเกิดเป็นการจัดกลุ่มของสิ่งของที่มีจำนวน n - k สิ่งพร้อมกัน<br><br>
+ที่มา : www.scimath.org
+`;
+
+    window.onload = function () {
+        const html = marked.parse(markdown);
+        document.getElementById('paragraph').innerHTML = html;
+        MathJax.typesetPromise(); 
+    };
+
+
     const menuToggleOutside = document.getElementById('menu-toggle-outside');
     const menuToggleInside = document.getElementById('menu-toggle-inside');
     const sideMenu = document.getElementById('side-menu');
