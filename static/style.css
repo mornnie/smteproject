@@ -25,6 +25,11 @@ body, button, input, select, textarea{
     position: relative;
 }
 
+.paragraph{
+    margin-left: 8px;
+    margin-top: 25px;
+}
+
 .page-button{
     display: inline-block;
     width: 100%;
@@ -81,9 +86,9 @@ body, button, input, select, textarea{
     z-index: 1000;
     top: 0;
     left: 0;
-    background-color: #000000;
+    background-color: #333;
     overflow-x: hidden;
-    transition: 0.3s;
+    transition: 0.3s ease;
 }
 
 .side-nav a{
@@ -93,6 +98,12 @@ body, button, input, select, textarea{
     color: white;
     display: block;
     transition: 0.2s;
+}
+
+.nav-text{
+    display: inline-block;
+    white-space: nowrap;
+    transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
 .side-nav div{
@@ -106,7 +117,7 @@ body, button, input, select, textarea{
 }
 
 .side-nav:hover{
-    background-color: #000000;
+    background-color: #575757;
 }
 
 .overlay{
@@ -149,6 +160,13 @@ body, button, input, select, textarea{
 
 .d1{
     border-bottom: black 1px solid;
+}
+
+.scope a{
+    text-decoration: none;
+    color: blue;
+    padding: 5px;
+    margin-top: 5px;
 }
 
 .upload-container{
