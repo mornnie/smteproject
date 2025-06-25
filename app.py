@@ -5,9 +5,9 @@ import math
 import time
 import joblib
 import numpy as np
-from flask import Flask, request, jsonify, render_template, send_from_directory, url_for
 from flask_cors import CORS
 from werkzeug.utils import secure_filename
+from flask import Flask, request, jsonify, render_template, send_from_directory, url_for
 
 app = Flask(__name__)
 CORS(app)
