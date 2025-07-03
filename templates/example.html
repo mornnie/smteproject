@@ -9,8 +9,17 @@
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Sarabun:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap" rel="stylesheet">
-        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
         <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+        <script>
+            window.MathJax = {
+            tex: {
+                inlineMath: [['\\(', '\\)'], ['$', '$']],
+                displayMath: [['$$', '$$']]
+            },
+            svg: { fontCache: 'global' }
+            };
+        </script>
     </head>
     <body>
         <div class="hamburger" id="menu-toggle-outside">&#9776</div>
@@ -23,17 +32,16 @@
             <a href="/rating"><span class="nav-text">ให้คะแนนเรา</span></a>
         </div>
         <div class="overlay" id="overlay"></div>
-                <div class="head-text">
-            <p class="title">ตัวอย่างโจทย์</p>
-            <p class="description"></p>
+            <div class="head-text">
+                <p class="title">ตัวอย่างโจทย์</p>
+                <p class="description"></p>
+            </div>
         </div>
         <div class="triangle">
-            <div class="triangle-image">รูปภาพ</div>
-            <div class="traingle-text">ตัวอย่างโจทย์ สี่เหลี่ยม</div>
+            <div class="triangle-text" id="triangle-text"></div>
         </div>
         <div class="rectangle">
-            <div class="rectangle-image">รูปภาพ</div>
-            <div class="rectangle-text">ตัวอย่างโจทย์ สามเหลี่ยม</div>
+            <div class="rectangle-text"></div>
         </div>
     </body>
 </html>
